@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\SubscriptionController;
 use Illuminate\Support\Facades\Route;
 
 // Register
@@ -32,3 +33,6 @@ Route::get('/subscriptions', function () {
 Route::get('/service/calculator', function () {
     return view('services.calculator');
 });
+
+Route::any('/makePayment', [SubscriptionController::class, 'phonePePayment']);
+Route::any('/checkPayment', [SubscriptionController::class, 'callBackAction']);

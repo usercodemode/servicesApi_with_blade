@@ -10,6 +10,7 @@
     <ul id="services-list"></ul>
 
     <script>
+        
         const token = localStorage.getItem('bearer_token'); // Assuming token is stored in local storage
 
         async function getServices() {

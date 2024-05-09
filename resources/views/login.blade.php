@@ -61,8 +61,10 @@
 
                     if (response.status != 200) {
                         alert("Login Failed");
+                        window.location.href = '/';
+
                     }
-                    
+
                     // Parse the response as JSON
                     return response.json();
                 })
@@ -72,12 +74,16 @@
                     //var user = JSON.parse(data);
                     // console.log(data);
                     // console.log(data.user.email);
-                    
+
 
                     console.log('Login successful:', data);
                     // Store the bearer token securely (if applicable)
                     localStorage.setItem('bearer_token', data.token); // Consider secure storage mechanisms
-                    window.location.href = '/services'; 
+
+                    if (localStorage.getItem('bearer_token') !== "undefined") {
+                        window.location.href = '/services';
+                    }
+
                 })
                 .catch(error => {
                     // Handle any errors that occurred during the fetch

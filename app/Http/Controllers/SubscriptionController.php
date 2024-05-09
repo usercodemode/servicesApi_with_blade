@@ -2,15 +2,37 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Subscription;
-use App\Models\Service;
 use App\Models\User;
+use App\Models\Service;
+use App\Models\Subscription;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Dipesh79\LaravelPhonePe\LaravelPhonePe;
 use Illuminate\Support\Facades\Auth; // Assuming user authentication
 
 class SubscriptionController extends Controller
 {
+    public function phonePePayment()
+    {
+        $phonepe = new LaravelPhonePe();
+        //amount, phone number, callback url, unique merchant transaction id
+        $url = $phonepe->makePayment(10, '9999999999', 'http://localhost:8000/checkPayment', 'MT7850590068188104');
+        return redirect($url)->away($url);
+    }
+
+    public function callBackAction(Request $request)
+    {
+        $phonepe = new LaravelPhonePe();
+        $response = $phonepe->getTransactionStatus($request->all());
+        if ($response == true) {
+            //Payment Success
+            echo "Payment Success";
+        } else {
+            //Payment Failed   
+            echo "Payment Failed";        
+        }
+    }
+
     public function subscribe(Request $request, Service $service)
     {
         $user = Auth::user();
@@ -36,7 +58,6 @@ class SubscriptionController extends Controller
 
         return response()->json($subscription, Response::HTTP_CREATED);
     }
-
 
     public function singleSubscription(Request $request, $id)
     {
